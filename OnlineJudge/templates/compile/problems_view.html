@@ -1,0 +1,39 @@
+{% extends "compile/maintemplate.html"  %}
+{% load staticfiles %}
+{% block body_view %}
+{% if problems %}
+           
+          {% for problem in problems %}
+          <div class="row">   
+          <div class="col-md-offset-2 col-lg-8">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <hdp style="color: #546FFF;">
+                   <h3 class="text-center"> {{problem.title}} </h3>
+                  <i class="fa fa-list-ul pull-right"></i> <i class="fa fa-trophy pull-right"></i> 
+                </hdp>
+                <p> {{problem.problem}} </p>
+                
+
+              </div>
+               <div class="panel-footer"> <button type="button" class="btn btn-default">{{problem.get_submissions.count}} submissions </button> 
+                <button type="button" class="btn btn-default">Max Score : {{problem.max_score}}</button>
+               
+                <a type="button" class="btn btn-primary pull-right {% if  status   %} {% else %} disabled {% endif %}" href="{%  url 'compile:view_problem' problem.id %}">Solve Challenge</a>
+                </div>
+               
+            </div>
+          </div>
+          </div>
+          {% endfor %}
+{% else %}
+<div class="row text-center">
+<h3>No Problems </h3>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}
+

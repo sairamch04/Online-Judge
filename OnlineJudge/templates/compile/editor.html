@@ -1,0 +1,200 @@
+
+{% extends 'compile/maintemplate.html' %}
+
+{% block body %}
+<div class="row">
+<div class="col-md-7">
+<div class="row">
+<div class="col-md-5">
+            <select class="form-control" id="lang" name="lang">
+                <option value="c" class="selected">C</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+            </div>
+            <div class="col-md-2 pull-right">
+<button id="save" href="#save_modal"  value="save" class="btn btn-danger" name="save" data-toggle="modal">Save</button>
+</div>
+</div>
+
+<div class="row">
+<br>
+</div>
+<div class="row">
+   <div id="editor" class="col-md-12">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+</div>
+<div class="row">
+<br><br>
+</div>
+<div class ="row">
+<input type="hidden" id="action" name="action">
+<button type="submit" id="submit"  value="submit" class="btn btn-danger" name="submit">Submit</button>
+<button type="submit" id="run"  value="run" class="btn btn-primary" name="run">Run!</button>
+</div>
+
+
+</div>
+
+
+
+
+<div class="form-group col-md-4 col-md-offset-1 text-center" style="margin-top: 40px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Input</h3>
+        </div>
+
+        <textarea class="form-control" style="resize: both; width: 100%; max-width: 100%; margin: 0px; height: 100px;" name="input" id="input" placeholder="Provide the inputs here(If Any)"></textarea>
+
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="save_modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+       <form class="form-horizontal" method="POST" action="" id="myform">
+       {% csrf_token %}
+                                        <div class="modal-header">
+                                            <h4>Save File</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+
+                                                <label for="file_name" class="col-lg-2">File Name:  </label>
+                                                <div class="form-group   col-lg-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">@</span>
+                                                        <input type="text" class="form-control" id="file_name" name="file_name" placeholder="Untitled" value ="">
+                                                    </div>
+                                                                                                    </div>
+                                            </div>
+                                           <textarea id="code" name="code" hidden> </textarea>
+                                            
+
+                                        <div class="modal-footer">
+                                            
+                                            <a class="btn btn-default" data-dismiss="modal">Cancel</a>
+                                            <button class="btn btn-primary" type="submit" id="save" name="save" value="save">Save!</button>
+
+                                        </div>
+        </form>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+{% endblock %} 
+
+
+
+
+
+
+
+{% block js %}
+
+<script src="/static/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<script>
+
+    ace.require("ace/ext/language_tools");
+    var l = $('#lang').val();
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/c_cpp");
+    var code = $('#code');
+
+    $('#lang').on('change', function() {
+        var l = $('#lang').val();
+
+        switch (l) {
+            case 'c':
+                mode = "c_cpp";
+                break;
+            case 'cpp':
+                mode = "c_cpp";
+                break;
+            case 'java':
+                mode = "java";
+                break;
+            case 'python':
+                mode = "python";
+                break;                   
+        }
+        editor.getSession().setMode("ace/mode/" + mode);
+
+    });
+
+    $('#save').on('click',function(){
+        var filen = $('#save');
+        
+        if(filen == ""){
+
+        }
+        code.val(editor.getSession().getValue());
+
+
+    });
+
+    //ajax
+     $("#myform").submit(function(e) {
+
+
+
+
+            var code=$("#code").val();
+            formURL = "/cms/compile/compile_ajax/";
+            
+            
+
+
+            var lang=$('#lang').val();
+            var input=$("#input").val();
+
+           // $("#details").text("");
+            //$('#panel').removeClass("hidden");
+           // $("#details").append('<img src="ajax-loader.gif" alt="loading"  id="loading">');
+           var csrf = "{{csrf_token}}";
+           //alert(lang);
+           // return false;
+           form_data={'code':code,'lang':lang,'input':input,'csrfmiddlewaretoken':csrf };
+           
+           
+            $.ajax({
+                url: formURL,
+                type: 'POST',
+                
+                data: form_data,
+                
+               
+                
+                success: function(data)
+                {
+                   //for debugging
+                 console.log(data)
+                    
+                },
+                error: function(a, b, c) {
+                alert(b);
+                    //("#loading").addClass("hidden");
+                    //$("#details").append('<p>Error!</p>');
+                }
+            });
+            
+            return false;
+        });
+
+
+    
+</script>
+
+
+{% endblock %}

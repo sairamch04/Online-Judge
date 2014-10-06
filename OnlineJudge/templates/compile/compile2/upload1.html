@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<html>
+<head><title> hi </title></head>
+<body>
+<form enctype="multipart/form-data" action="" method="post">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit"/> 
+</form>
+<div id="message"> 
+</div>
+<div id="output">
+</div>
+<div id ="details">
+</div>
+
+<!-- JavaScript -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+ 
+    <script type="text/javascript">
+
+ $("form").submit(function(e){ 
+  formData = new FormData(this);
+ $("#message").text("");
+  
+   var url='{% url 'compile:compile_ajax' %}'; 
+   $.ajax({ 
+   	type : 'POST',
+    url : url,
+    contentType:false,
+      data:  formData,
+      mimeType:"multipart/form-data",
+    datatype:"xml",
+    cache: false,
+    processData:false,
+    success : function(data){ 
+      
+       //var rssentries=xmldata.getElementsByTagName("item")
+      //var compile = data.getElementsByTagName("compile");
+      //if($(data).find)
+    // var temp = $(data).find('output').text() ;
+    /* var temp1 = document.getElementsById("output");
+     temp1.innerHTML=$(data).find('output').text() ; 
+     var temp2 = document.getElementsById("details") 
+     */
+     $("#output").html("output: " + $(data).find('output').text()) ; 
+     var detail = '' ;
+
+      if($(data).find('compile').text() == 'y')
+         { 
+           detail += "\nCOMPILATON : yes " ;
+          if($(data).find('error').text())
+          {
+           detail += "\nWARNIGNS:" + $(data).find('error').text() ;  
+          }
+           else
+           {
+             detail += "\nWARNIGNS:  NO " ;
+
+           if($(data).find('runtmerr').text())
+               { 
+                  detail += "\n" + "RUNTIME ERROR:"+ $(data).find('runtmerr').text(); 
+               }
+             else{ 
+                   detail += "\n" + "TIME TAKEN: " + $(data).find('time').text(); 
+                 } 
+              }
+            } 
+         
+         else
+            {detail += "\nCOMPILATON : failure" ; 
+             detail += "\nerror:" + $(data).find('error').text(); 
+            }
+   //alert(detail);
+     console.log(detail);
+      $("#details").html(detail); 
+      
+      // $("#message").text(data);
+   }
+         
+          });
+       e.preventDefault();
+        });
+
+</script>
+
+</body>
+</html>

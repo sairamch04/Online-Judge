@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>{{title}}</title>
+{% block css %}
+    <!-- Bootstrap core CSS -->
+    <link  rel="stylesheet" href="{% static 'compile/css/bootstrap.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'compile/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static  'compile/css/main.css' %}" >
+    
+	<link rel="stylesheet"  href="{% static 'compile/css/normalize.css' %}">
+	<link rel="stylesheet"  href="{% static 'compile/css/component.css' %}">
+
+{% endblock %}
+<script src="{% static 'compile/js/jquery.js' %}"></script>
+ </head>
+
+  <body data-spy="scroll" data-offset="0" data-target="#gn-menu">
+  	<!-- ========== MAIN MENU ========== -->
+	<div class="container">
+		<ul id="gn-menu" class="gn-menu-main">
+			<li class="gn-trigger">
+				<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+				<nav class="gn-menu-wrapper">
+					<div class="gn-scroller">
+						<ul class="gn-menu">
+							<li class="gn-search-item">
+								<input placeholder="Search" type="search" class="gn-search">
+								<a class="gn-icon gn-icon-search"><span>Search</span></a>
+							</li>
+							<li><a href="" class="gn-icon gn-icon-home smoothScroll">Home</a></li>
+							<li><a href="{% url 'compile:view_contests' %}" class="gn-icon gn-icon-archive smoothScroll">View challenges</a></li>
+							<li><a href="{% url 'compile:create_contest' %}" class="gn-icon gn-icon-pictures smoothScroll">Create contest</a></li>
+							<li><a href="{% url 'compile:submissions' %}" class="gn-icon gn-icon-article smoothScroll">Submissions</a></li>
+							<li><a href="{% url 'compile:practise' %}" class="gn-icon gn-icon-envelop smoothScroll">Practise</a></li>
+						</ul>
+					</div><!-- /gn-scroller -->
+				</nav>
+			</li>
+			<li><a href="" class="smoothScroll">{{user.username}}</a></li>
+		</ul>
+	</div><!-- /container -->
+<!-- ========== HEADER SECTION ========== -->
+<section id="home" name="home"></section>
+
+
+<div class="body-wrapper">
+       <div class="row">
+          <div class="col-lg-12">
+            
+            <ol class="breadcrumb">
+              <li><a href="index.html"><i class="icon-dashboard"></i> Dashboard</a></li>
+              <li class="active"><i class="icon-file-alt"></i> Blank Page</li>
+            </ol>
+          </div>
+        </div>
+        <div class="row">
+        {% block body_view %}
+
+        {% endblock %}
+
+
+        </div>
+</div>
+{% block js %}
+
+	
+    
+    <script src="{% static 'compile/js/modernizr.custom.js' %}"></script>
+       <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'compile/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'compile/js/retina.js' %}"></script>
+	<script src="{% static 'compile/js/classie.js'  %}"></script>
+    <script  src="{% static 'compile/js/smoothscroll.js' %}"></script> 
+	<script src="{% static 'compile/js/gnmenu.js' %}"></script>
+	<script>
+
+		new gnMenu( document.getElementById( 'gn-menu' ) );
+	</script> 
+	<script>
+    $('.carousel').carousel({
+        interval: 5500
+    })
+</script>
+	
+
+
+{% endblock %}
+
+</body>
+</html>

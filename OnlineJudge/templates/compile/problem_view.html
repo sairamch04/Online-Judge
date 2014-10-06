@@ -1,0 +1,477 @@
+{% extends "compile/maintemplate.html"  %}
+{% load staticfiles %}
+{% block css %}
+{{block.super}}
+<style type="text/css">
+ #editor { 
+        position: relative;
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+
+{% endblock %}
+{% block body_view %}
+<div class="row">
+  <div class="row">
+<div class="col-md-offset-3  col-lg-6 ">
+            <br><a type="button" href="{%  url 'compile:view_contest' problem.contest.id %}" class="btn btn-default  btn-lg btn-block">{{problem.contest.title}}</a><br><br>
+ </div>
+</div>
+<div class="row">
+<div class="col-md-6 col-md-offset-1">
+         <div class="panel panel-default">
+              <div class="panel-body">
+                <hdp style="color: #546FFF;">
+                   <h3 class="text-center"><b>{{problem.title}}</b> &nbsp &nbsp <i>Max score: {{problem.max_score}}</i></h3>
+                 
+                </hdp>
+                <pre> {{problem.problem|safe}} </pre>
+                
+
+              </div>
+               
+         </div>
+               
+</div>
+
+<div class="col-md-5">
+<h4 class="text-center">Recent Submissions</h4>
+
+<div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>User </th>
+                    <th>TimeAgo</th>
+                    <th>Result</th>
+                    <th>TC Pasd</th>
+                    <th>Avg runtime</th>
+                    <th>LangUsed</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for submission in dashboard %}
+                  <tr>
+                    <td>{{submission.user.username}}</td>
+                    <td>{{submission.created|timesince}}</td>
+                    <td>
+                      {% if submission.submission_result.result_type == 1 %}
+                        CORRECT
+                      {% elif submission.submission_result.result_type == 2 %}
+                        WRONG
+                      {% elif submission.submission_result.result_type == 3 %}
+                        TLE
+                      {% elif submission.submission_result.result_type == 4 %}
+                        RUNTIME ERR
+                      {% elif submission.submission_result.result_type == 5 %}
+                      COMP ERR
+                      {% endif %}
+
+                    </td>
+                    <td>{{submission.get_testcase_passed}}</td>
+                    <td>{{submission.get_average_time}}</td>
+                    <td>{{submission.get_lang}}</td>
+                    <td>100</td>
+                  </tr>
+                  {% endfor %}
+                  
+                  
+                </tbody>
+              </table>
+</div>
+</div>
+
+
+</div>
+
+</div>
+
+
+<br>
+<br>
+
+{# choice #}
+
+<div class="row text-center"><a href="" id="choice">Do you want to upload code ?</a></div>
+
+
+{#  file upload begins   #}
+<div class="row" id="form1_parent">
+<form method="post" enctype="multipart/form-data" id="form1">
+<div class="col-md-5 col-md-offset-1">
+<div class="row">
+<input type="file" name="code" />
+</div>
+<div class ="row text-center">
+<input type="hidden" name="problem_id" value="{{problem.id}}"/>
+<input type="hidden" name="submit" value="upload">
+<button type="submit"  value="upload" class="btn btn-danger" name="submit">Submit</button>
+<!--button type="submit"  value="run" class="btn btn-primary" name="run">Run!</button-->
+</div>
+</div>
+
+<div class="col-md-6">
+
+<div class="row">
+<div class="form-group  text-center  hidden" id="form1_outputbox">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Result</h3>
+        </div>
+    <div class="row" id="form1_output">
+
+    </div>
+    <br>
+    <div class="row" id="form1_details">
+
+    </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+</form>
+
+
+</div>
+{# fileupload ends #}
+
+
+
+{# editor begins  #}
+
+
+<div class="row" id="form2_parent">
+<form method="post" id="form2" action="{% url 'compile:compile_ajax' %}">
+<div class="col-md-7 col-md-offset-1">
+<div class="row">
+            <select class="form-control" id="lang" name="lang">
+                <option value="c" selected>C</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+</div>
+
+<div class="row">
+<br>
+</div>
+<div class="row">
+   <div id="editor" class="col-md-12">#include&lt;stdio.h&gt;
+int main(){
+    printf("hello world");
+    return 0;
+}
+   </div>
+</div>
+
+
+<div class="row">
+<br><br>
+</div>
+<div class ="row text-center">
+<input type="hidden" name="code" id="code" value=""/>
+<input type="hidden" id="filename" name="filename" value="{{filename}}"/>
+<input type="hidden" name="problem_id" value="{{problem.id}}"/>
+<input type="hidden" name="submit" value="editor">
+<button type="submit"  name="submit"  value="editor" class="btn btn-danger">Submit</button>
+<!--button type="submit"  value="run" class="btn btn-primary" name="run">Run!</button -->
+</div>
+
+
+</div>
+<div class="col-md-4">
+  <div class="row">
+
+    <br><br><br><br>
+  </div>
+<div class="row">
+<div class="form-group  text-center  hidden" id="outputbox">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Result</h3>
+        </div>
+    <div class="row" id="output">
+
+    </div>
+    <br>
+    <div class="row" id="details">
+
+    </div>
+
+    </div>
+</div>
+</div>
+</div>
+</form>
+
+
+</div>
+
+
+{% endblock %} 
+
+
+
+
+
+
+
+{% block js %}
+{{block.super}}
+
+
+<script src="{% static 'compile/ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+<script src="{% static 'compile/ace/ext-language_tools.js' %}" type="text/javascript" charset="utf-8"></script>
+<script>
+$("#form1_parent").hide();
+//choice between editor or fileupload
+$("#choice").click(function(event){
+  $(this).text($(this).text() == 'Do you Want To use editor' ? 'Do you want to upload code ?' : 'Do you Want To use editor');
+  if($(this).text() == 'Do you Want To use editor'){
+  $("#form2_parent").hide();
+  $("#form1_parent").show()
+}
+else{
+  $("#form1_parent").hide();
+$("#form2_parent").show();
+
+}
+
+  return false;
+
+});
+
+
+      ace.require("ace/ext/language_tools");
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/c_cpp");
+    $("#code").val(editor.getSession().getValue());
+     
+
+    $('#lang').on('change', function() {
+        var l = $('#lang').val();
+
+
+        switch (l) {
+            case 'c':
+                
+                mode = "c_cpp";
+                m=1;
+                
+                
+                break;
+            case 'cpp':
+                mode = "c_cpp";
+                m=2;
+
+                break;
+            case 'java':
+                alert(" The name of public class; must be : "+$("#filename").val());
+                mode = "java";
+                m=3;
+              
+                break;
+            case 'python':
+                mode = "python";
+                m=4;
+                break;                   
+        }
+        
+        editor.getSession().setMode("ace/mode/" + mode);
+
+        file_url="{% url 'compile:get_code' %}";
+        filename=$("#filename").val();
+            $.ajax({
+                url: file_url,
+                type: 'GET',
+                data: {'mode':m,'filename':filename},
+                success: function(code){
+                    editor.getSession().setValue(code);
+                },
+                error: function(a,b,c){
+                    alert("Sorry ,Please refresh page!!!");
+                }
+
+            });
+
+
+    });
+
+//csrf update
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    //code editor ajax
+     $("#form2").submit(function(e) {
+        $("#code").val(editor.getSession().getValue());
+
+        $("#outputbox").removeClass('hidden');
+        $("#details").html('');
+        $("#output").html('<img src="{% static 'compile/images/ajax-loader.gif' %}" title="waiting for response ..please wait"  />');
+
+        formURL = "{% url 'compile:compile_ajax' %}";
+        extra_data={'csrfmiddlewaretoken':getCookie('csrftoken')};
+
+ 
+        $.ajax({
+                url: formURL,
+                type: 'POST',
+                
+                data: $("#form2").serialize()+'&'+$.param(extra_data),
+                
+                success: function(data){ 
+                
+                
+                if($(data).find('compile').text() == 'ok')
+         {            
+           if($(data).find('runtmerror').text())
+               {      
+                        $("#output").html('Runtime error:  !!! <br>');
+                        $("#output").append($(data).find('runtmerror').text() +'<br>'); 
+               }
+              else
+                 {  if($(data).find('output').text())
+                       {$("#output").html('Executed Properly !!! <br>');
+                        $("#output").append('<b>Ouptut of code::</b> <br>'+ $(data).find('output').text() +'<br>');
+                        $("#details").append('<b>Time Taken: </b><br>'+$(data).find('total_time').text()+'<br>');
+                       }
+                      else{ 
+                            if($(data).find('total_time').text()=="tle")
+                            {
+                            $("#details").append('<b>Time Taken: </b><br>'+$(data).find('total_time').text()+'<br>'); 
+                            }
+                            else{
+                            $("#details").append('<b>TestCase 1 : </b><br>'+$(data).find('ans_testcase_0').text()+'<br><b> Time Taken :</b>' + $(data).find('time_testcase_0').text());
+                            $("#details").append('<b>TestCase 2 : </b><br>'+$(data).find('ans_testcase_1').text()+'<b> Time Taken :</b><br>' + $(data).find('time_testcase_1').text());
+                            $("#details").append('<b>TestCase 3 : </b><br>'+$(data).find('ans_testcase_2').text()+'<b> Time Taken :</b><br>' + $(data).find('time_testcase_2').text());
+                            $("#details").append('<b>Total Time taken :</b><br>'+$(data).find('total_time').text() + '<br>')
+                            
+                            }
+                       }
+                 } 
+         }         
+         else
+            {$("#output").html('Compilation error  !!! <br>');
+             $("#output").append('<b>Error::</b> <br>'+ $(data).find('error').text() +'<br>');
+            }                   
+                   
+                },
+                error: function(error) {
+                  $("#output").html('');
+                  $("#details").html('');
+                alert(error +" .........please Try again");
+                    
+                }
+            });
+            
+            file_url="{% url 'compile:get_filename' 1 %}";
+            $.ajax({
+                url: file_url,
+                success: function(filename){
+                    //alert(filename)
+                    $("#filename").val(filename);
+                    console.log(filename);
+                },
+                error: function(a,b,c){
+                    alert("Sorry ,Please refresh page!!!");
+                }
+
+            });
+            
+            return false;
+        });
+
+
+
+//file upload ajax
+
+     $("#form1").submit(function(e) {
+
+            $("#form1_outputbox").removeClass('hidden');
+            $("#form1_output").html('<img src="{% static 'compile/images/ajax-loader.gif' %}"   title="waiting for response ..please wait"  />');
+            $("#form1_details").html('');
+
+            formURL = "{% url 'compile:compile_ajax' %}";
+            extra_data={'csrfmiddlewaretoken':getCookie('csrftoken')};
+
+            $.ajax({
+                url: formURL,
+                type: 'POST',
+                
+                data: $("#form1").serialize()+'&'+$.param(extra_data),
+                
+                success: function(data){
+                 
+                if($(data).find('compile').text() == 'ok')
+         {            
+           if($(data).find('runtmerror').text())
+               {      
+                        $("#form1_output").html('Runtime error:  !!! <br>');
+                        $("#form1_output").append($(data).find('runtmerror').text() +'<br>'); 
+               }
+              else
+                 {  if($(data).find('output').text())
+                       {$("#form1_output").html('Executed Properly !!! <br>');
+                        $("#form1_output").append('<b>Ouptut of code::</b> <br>'+ $(data).find('output').text() +'<br>');
+                        $("#form1_details").append('<b>Time Taken: </b><br>'+$(data).find('total_time').text()+'<br>');
+                       }
+                      else{ 
+                            if($(data).find('total_time').text()=="tle")
+                            {
+                            $("#form1_details").append('<b>Time Taken: </b><br>'+$(data).find('total_time').text()+'<br>'); 
+                            }
+                            else{
+                            $("#form1_details").append('<b>TestCase 1 : </b><br>'+$(data).find('ans_testcase_0').text()+'<br><b> Time Taken :</b>' + $(data).find('time_testcase_0').text());
+                            $("#form1_details").append('<b>TestCase 2 : </b><br>'+$(data).find('ans_testcase_1').text()+'<b> Time Taken :</b><br>' + $(data).find('time_testcase_1').text());
+                            $("#form1_details").append('<b>TestCase 3 : </b><br>'+$(data).find('ans_testcase_2').text()+'<b> Time Taken :</b><br>' + $(data).find('time_testcase_2').text());
+                            $("#form1_details").append('<b>Total Time taken :</b><br>'+$(data).find('total_time').text() + '<br>')
+                            
+                            }
+                       }
+                 } 
+         }         
+         else
+            {$("#form1_output").html('Compilation error  !!! <br>');
+             $("#form1_output").append('<b>Error::</b> <br>'+ $(data).find('error').text() +'<br>');
+            }                   
+                   
+                },
+                error: function(error) {
+                  $("#form1_output").html('');
+                  $("#form1_details").html('');
+                alert(error +" .........please Try again");
+                    
+                }
+            });
+             
+            
+            return false;
+        });
+
+    
+</script>
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,36 @@
+hd{
+	/* Using the custom font we've included in the HTML tab: */
+	
+	font-size: 20px;
+	color: black;
+
+	
+}
+
+hdp{
+
+	font-size: 30px;
+	font-family: Georgia;
+	color: white;
+
+}
+
+
+
+
+.btn-danger1 {
+  color: red;
+  background-color: green;
+  border-color: #d43f3a;
+}
+
+.panel-success > .panel-heading1 {
+	padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  color: #468847;
+  background-color: #28e1bd;
+  border-color: #d6e9c6;
+
+}

@@ -1,0 +1,79 @@
+
+{% extends 'compile/maintemplate.html' %}
+{% load staticfiles %}
+
+
+
+{% block body_view %}
+<div class="row col-md-offset-1">
+<div class="col-md-8 text-center"/>
+<div class="text-center">Contest Submissions</div>
+<div class="table-responsive">
+<table class="table table-striped">
+<tr>
+ <th>Time Submitted</th>
+ <th>Contest</th>
+ <th>problem</th>
+ <th>lang used</th>
+ <th>view code</th>
+ <th>result</th>
+ <th>avg. time</th>
+</tr>
+
+{% for submission in contest_submission %}
+<tr>
+	<td>{{submission.created|timesince}}</td>
+	<td><a href="{% url 'compile:view_contest' submission.contest_problem.contest.id %}">{{submission.contest_problem.contest.title}}</a></td>
+	<td><a href="{% url 'compile:view_problem' submission.contest_problem.id  %}">{{submission.contest_problem}}</a></td>
+	<td>{{submission.get_lang}}</td>
+	<td><a href="{% url 'compile:contest_code' submission.id  %}">view</a></td>
+	<td>
+		{% if  submission.get_result == 1 %}
+			Success
+		{% elif submission.get_result == 2 %}
+			Wrong
+		{% elif submission.get_result == 3 %}
+			TLE
+		{% elif submission.get_result == 4 %}
+		RUNTIME ERROR
+		{% else %}
+		COMPILATION ERROR
+		{% endif %}
+	</td>
+	<td>
+		{% if submission.get_result == 1 or submission.get_result == 2  %}
+		{{submission.get_average_time}}
+		{% endif %}
+		
+	</td>	
+</tr>
+{% endfor %}
+</table>
+
+</div>
+</div>
+<div class="col-md-8 text-center"/>
+<div class="text-center">pratised code</div>
+<div class="table-responsive">
+<table class="table table-striped">
+<tr>
+ <th>Time Submitted</th>
+ <th>lang used</th>
+ <th>view code</th>
+</tr>
+
+{% for submission in practise_submission %}
+<tr>
+	<td>{{submission.created|timesince}} ago </td>
+	
+	<td>{{submission.get_lang}}</td>
+	<td><a href="{% url 'compile:practise_code' submission.id  %}">view</a></td>
+		
+</tr>
+{% endfor %}
+</table>
+
+</div>
+</div>
+</div>
+{% endblock %}

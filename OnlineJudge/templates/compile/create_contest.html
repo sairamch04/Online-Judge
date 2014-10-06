@@ -1,0 +1,160 @@
+
+{% extends "compile/maintemplate.html" %}
+{% load staticfiles %}
+{% block css %}
+{{block.super}}
+
+  
+{% endblock %}
+{% block js %}
+{{block.super}}
+
+
+    <!-- JavaScript -->
+  
+
+{% endblock %}
+
+{% block body %}
+
+      <div id="wrapper">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <h1>Dashboard <small>Statistics Overview</small></h1>
+            <ol class="breadcrumb">
+              <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+            </ol>
+            
+          </div>
+        </div><!-- /.row -->
+
+
+      <div id="page-wrapper">
+        <div class="row">
+          <div class="col-lg-10">
+        <br>
+
+        
+        <div id="content"><div class="administration-contest-edit"><section class="admin contestedit container content_wrap">
+<div class="container--inner">
+        <header class="page-title">
+            <div class="baseless-padded">
+                <div class="clearfix">
+                    <h1 class="pull-left">
+                        
+                        Create Contest
+                        
+                    </h1>
+                    <div class="pull-right margin-small top">
+                        
+                        <button class="save-contest btn btn-primary">Save Contest</button>
+                    </div>
+                </div>
+                <ul class="nav-tabs nav admin-tabbed-nav">
+                    <li data-tab="overview" class="active"><a class="cursor change-tab">Overview</a></li>
+                    
+                    <li class="pull-right no-tab">
+                        <a href="file:///C:/administration/contests" class="btn btn-text right-align backbone">View all contests<i class="icon-right-open icon--right "></i></a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="tabs-body horizontal-padded">
+            <div class="tabs-body-inner">
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="name">Contest Name</label>
+    <div class="block span8 profile-input pull-left">
+        <input type="text" class="fw auto-save" id="name">
+        <small class="error name span12"></small>
+    </div>
+</div>
+
+
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="slug">Duration</label>
+    <div class="block span12 profile-input">
+        <div class="row">
+            <div class="span5 mlR">
+                <label class="msB">Starts</label>
+                <input type="text" class="span5 hasDatepicker" id="startdate">
+                <div class="input-assist clearfix">
+                    <p class="pull-left static-input">at</p>
+                    <input type="text" class="span2 float-left margin-small left right ui-timepicker-input" id="starttime" autocomplete="off">
+                    <p class="pull-left static-input">IST
+                        <span class="help-prompt">
+                            <i class="icon-help-circled icon--single"></i>
+                            <span class="help-text">Times shown reflect your local timezone.</span>
+                        </span>
+                    </p>
+                </div>
+                <p><small class="starttime error"></small></p>
+            </div>
+            <div class="span5 mlL">
+                <div class="clearfix">
+                    <label class="msB pull-left">Ends</label>
+                    <div class="pull-left plL">
+                        <input type="checkbox" id="noendtime" class="inline pull-left mlL plL">
+                        <span class="psL">no end time</span>
+                    </div>
+                </div>
+                <input type="text" class="span5 hasDatepicker" id="enddate">
+                <p class="input-assist clearfix">
+                    </p><p class="pull-left static-input">at</p>
+                    <input type="text" class="span2 float-left margin-small left right ui-timepicker-input" id="endtime" autocomplete="off">
+                    <p class="pull-left static-input">IST
+                        <span class="help-prompt">
+                            <i class="icon-help-circled icon--single"></i>
+                            <span class="help-text">Times shown reflect your local timezone.</span>
+                        </span>
+                    </p>
+                <p></p>
+                <p><small class="endtime error span12"></small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="tagline">Tagline</label>
+    <div class="block span8 profile-input pull-left">
+        <textarea class="tagline fw auto-save with-help" rows="3"></textarea>
+        <p class="tagline sub-help in">Characters left: 100</p>
+    </div>
+</div>
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="description">Description</label>
+    <div class="block span8 profile-input pull-left">
+        <div class="markdown-editor-header">
+            <p class="pull-left">Markdown Editor</p>
+            <div class="pull-right">
+                <button class="btn btn-small mkd-cheat-sheet msR">Cheatsheet</button>
+            </div>
+        </div>
+        <textarea class="description fw light-wrap" rows="7" style="display: none;"></textarea>
+</div>
+
+
+</div>
+        </div>
+    </div>
+</div></section>
+</div></div>
+</div>
+     </div>
+      </div><!-- /#page-wrapper -->
+
+
+    </div><!-- /#wrapper -->
+        
+
+
+
+
+      </div><!-- /#page-wrapper -->
+{% endblock %}
+
+

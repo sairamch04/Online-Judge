@@ -1,0 +1,80 @@
+{% extends 'compile/index.html' %}
+
+{% block body %}
+
+
+
+<div class="container">
+<div id="editor">some text</div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block js %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'ace/ace.js' %}"></script>
+    <script src="{% static 'ace/theme-twilight.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'ace/ext-language_tools.js' %}" type="text/javascript" charset="utf-8"></script>
+
+    
+    <script>
+    ace.require("ace/ext/language_tools");
+    var l = $('#lang').val();
+    var textarea = $('#content');
+    var editor = ace.edit("editor");
+    var change = true;
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/c_cpp");
+    $.get('c.txt', function(c) {
+        editor.setValue(c, 1);
+    });
+    var mode = "c_pp";
+    var file = "c.txt";
+
+    $('#lang').on('change', function() {
+        var l = $('#lang').val();
+
+        var fprev = file;
+        switch (l) {
+            case 'c':
+                mode = "c_cpp";
+                file = "c.txt";
+                break;
+            case 'cpp':
+                mode = "c_cpp";
+                file = "cpp.txt";
+                break;
+            case 'java':
+                mode = "java";
+                file = "java.txt";
+                break;
+        }
+        editor.getSession().setMode("ace/mode/" + mode);
+
+        $.get(file, function(c) {
+            $.get(fprev, function(p) {
+                if (p == editor.getSession().getValue()) {
+                    editor.setValue(c, 1);
+                }
+            });
+        });
+
+    });
+
+
+    editor.getSession().on('change', function() {
+        textarea.val(editor.getSession().getValue());
+    });
+
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true
+    });
+    textarea.val(editor.getSession().getValue());
+</script>
+{% endblock %}

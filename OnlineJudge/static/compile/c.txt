@@ -1,0 +1,6 @@
+#include<stdio.h>
+
+int main(){
+printf("welcome To CodeGear");
+return 0;
+}

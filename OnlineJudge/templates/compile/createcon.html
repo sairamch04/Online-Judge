@@ -1,0 +1,175 @@
+{% extends "compile/maintemplate.html"  %}
+{% load staticfiles %}
+{% block css %}
+{{block.super}}
+<style type="text/css">
+
+</style>
+<link href="{% static 'compile/css/3.css' %}" media="all" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{% static 'compile/css/ui-darkness/jquery-ui-1.10.4.custom.css' %}">
+<link href="{% static 'compile/css/jquery.timepicker.css' %}" rel="stylesheet">
+<link href="{% static 'compile/css/styles.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static "compile/css/summernote.css"  %}" />
+
+{% endblock %}
+
+
+
+
+{% block body_view %}
+<form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+
+
+    <div class="row">
+        <div class="col-md-offset-1 col-lg-10">
+            <div class="panel panel-success">
+               <div class="panel-heading1">
+                  <h3 class="panel-title text-center"><hdp>Create Contest</hdp></h3>
+               </div>
+               <div class="panel-body">
+                    <a type="button" class="btn btn-default  pull-right" href="{% url 'compile:view_contests' %}" target="_blank">View all contests</a>
+                    <br><br><br>
+             
+               <div id="content"><div class="administration-contest-edit"><section class="admin contestedit container content_wrap">
+    <div class="container--inner">
+        <header class="page-title">
+            <div class="baseless-padded">
+                
+               
+            </div>
+        </header>
+        <div class="tabs-body horizontal-padded">
+            <div class="tabs-body-inner">
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="contest_name">Contest Name</label>
+    <div class="block span8 profile-input pull-left">
+        <input type="text"  name="contest_name" required="true" id="contest_name">
+        
+    </div>
+</div>
+
+
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3">Duration</label>
+    <div class="block span12 profile-input">
+        <div class="row">
+            <div class="span5 mlR">
+                <div class="clearfix">
+                <label class="msB" >Starts</label>
+            </div>
+                <input type="text" class="span5" name="startdate" id="startdate">
+                
+                <p class="input-assist clearfix">
+                    <p class="pull-left static-input">at</p>
+                    <input type="text" class="span2 float-left margin-small left right ui-timepicker-input" name="starttime"  id="starttime" autocomplete="off">
+                    <p class="pull-left static-input">IST</p>
+                </p>
+                
+            </div>
+            <div class="span5 mlL">
+                <div class="clearfix">
+                    <label class="msB pull-left" >Ends</label>
+                    
+                </div>
+                <input type="text" class="span5" name="enddate" id="enddate">
+                <p class="input-assist clearfix">
+                    </p><p class="pull-left static-input" name="endtime">at</p>
+                    <input type="text" class="span2 float-left margin-small left right ui-timepicker-input" id="endtime" name="endtime" autocomplete="off">
+                    <p class="pull-left static-input">IST</p>
+                <p></p>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="formgroup horizontal row">
+    <label class="pull-left span3" for="description">Description</label>
+    <div class="block span8 profile-input pull-left">
+        <textarea class="tagline fw auto-save with-help" id="description" required="true" name="description" rows="3"></textarea>
+        
+    </div>
+</div>
+
+<div class="text-center row">
+<select  name="num_problems" id="num_problems">
+<option>Select Number of prob</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+</div>
+<div class="row" id="problems_content">
+
+
+</div>
+
+
+<div class="col-md-offset-2 col-lg-7">
+<button type="submit" class="btn btn-default btn-lg btn-block"><strong>Save Contest</strong></button>
+</div>
+
+
+</div>
+    </div>
+</div></section>
+</div></div>
+           
+            </div>
+
+        </div>   
+          
+    </div>
+     
+</div>
+
+</form> 
+{% endblock %}
+
+
+{% block js %}
+{{block.super}}
+
+
+<script src="{% static 'compile/js/jquery-ui-1.10.4.custom.js' %}"></script>
+<script src="{% static 'compile/js/jquery.timepicker.js' %}"></script>
+<script src="{% static 'compile/js/summernote.js'   %}" type="text/javascript"></script>
+<script>
+  $(function() {
+    $('#startdate').datepicker();
+    $('#enddate').datepicker();
+    $('#starttime').timepicker();
+    $('#endtime').timepicker();
+    
+  });
+  $('#num_problems').on('change', function() {
+       file_url="{% url 'compile:get_problemshtml' %}";
+       m=$("#num_problems").val();
+                $.ajax({
+                url: file_url,
+                type: 'GET',
+                data: {'mode':m},
+                success: function(code){
+                    $("#problems_content").html(code);
+                    $('.summernote').summernote({
+                        height: 150,   //set editable area's height
+                       
+                    });
+
+                },
+                error: function(a,b,c){
+                    alert("Sorry ,Please refresh page!!!");
+                }
+
+            });
+            });
+  </script>
+  {% endblock %}
+  
+

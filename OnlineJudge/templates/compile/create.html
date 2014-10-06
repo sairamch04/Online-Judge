@@ -1,0 +1,20 @@
+
+{% extends 'compile/maintemplate.html' %}
+
+{% block body_view  %}
+<div class="row col-md-offset-1">
+<form method="post">
+<div class="row">
+{{contestform.as_p}}
+</div>
+<div class="row">
+{{contestproblem.as_p}}
+</div>
+
+</form>
+
+
+</div>
+
+
+{% endblock %}

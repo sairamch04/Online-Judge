@@ -1,0 +1,168 @@
+<!-- Modal -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+  <div class="modal-dialog">
+    <div class="modal-content">
+         
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <center><h4><?php echo $subcode ?></h4></center>
+        <center><h5 class="modal-title" > Conduct Exam :         Date:<?php echo date('d-m-y') ?></h5></center>
+      </div>
+         <!--form start-->
+       <form  id="myform" class="form-horizontal" role="form" method="post"  action="examconduct.php?course=<?php echo $subcode ?>" enctype="multipart/form-data">
+      <div class="modal-body">
+       
+          
+              <div class="form-group">
+    <label for="examname" class="col-sm-5 control-label">Exam Name:</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" name="examname" id="examname"  placeholder="no spaces ">
+    </div>
+  </div>
+          
+     
+    <div class="form-group"> 
+      
+    <label  class="col-sm-4 control-label">StartTime</label>
+    <div class="col-sm-8 bfh-timepicker"  data-name="start"  id="start">
+      
+</div>
+  </div>
+  
+              <div class="form-group">
+ 
+     <label class="col-sm-4 control-label">EndTime</label>
+   <div class="col-sm-8 bfh-timepicker" data-name="end" id="end">
+    </div>
+  </div>
+    
+
+    
+      <div class="form-group">
+          
+            <div class="col-md-6">    
+               Upload Questions:   
+            </div>
+          <div class="col-md-6">
+              <input name="code[]"  type="file"/>
+          </div>
+      </div>
+          <div class="form-group">
+              <div class="col-md-6">
+                  <label>Select Num Of Test Cases:</label>
+              </div>
+              <div class="col-md-6">
+              <select id="NumOfTestcases" class="col-md-6" onchange="showfiles()" >
+                  <option>0</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+              
+              </select>
+              </div>
+              
+              
+              
+          </div>
+          <div class="form-group" id="testcases">
+              
+              </div>
+          <div class="form-group">
+         <div class="alert alert-warning col-sm-12 hidden" id="warning">
+         </div>
+          </div>
+      
+ 
+           
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+      
+       $('#datetimepicker1').datetimepicker({
+      language: 'pt-BR'
+    });
+      
+  
+       $("#myform").submit(function(e){
+          $("#warning").text("");
+           $("#warning").html("<img src='img/482.GIF' alt='Loading..' ></img>");
+          $("#warning").removeClass("hidden");
+          formURL=$(this).attr('action');
+           
+           formData = new FormData(this);
+          
+          
+          if($("#examname").val()==""){
+               $("#warning").text("Exam name cant be empty");
+               e.preventDefault();
+               return false;
+           }
+           
+        $.ajax({
+          
+  
+          url: formURL,
+          type: 'POST',
+                contentType:false,
+      data:  formData,
+      mimeType:"multipart/form-data",
+      dataType:"json",
+                        
+          cache: false,
+          processData:false,
+      success: function(data){
+                          
+                                   //  alert(data.hasOwnProperty("dberror"));
+                                if(!data.hasOwnProperty("dberror")){
+                                       if(!data.hasOwnProperty("nameexists")){
+                                           if(data.hasOwnProperty("examname"))
+                                              $("#warning").html("<p>"+data.examname+"</p>")
+                                          else{
+                                           if(!data.hasOwnProperty("uploaderror")){
+                                             $("#warning").html("<p>"+data.success+"</p>")  ;
+                                           }else
+                                           $("#warning").html("<p>"+data.uploaderror+"</p>");
+                                       }
+                                       
+                                       }else{
+                                           $("#warning").html("<p>"+data.nameexists+"</p>") 
+                                           }
+                                       
+                                       }else{
+                                       
+                            $("#warning").html("<p>"+data.dberror+"</p>");
+                        }
+                        
+
+    },
+        error:function(p,q,r){
+    alert(p);    
+    
+    }
+        });
+ 
+        e.preventDefault();
+        return false;
+    });
+    
+    
+  
+});
+ 
+      </script>
